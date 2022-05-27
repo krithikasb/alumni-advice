@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <link rel="stylesheet" type="text/css" href="./styles.css"/>
+    <link rel="stylesheet" type="text/css" href="./styles.css" />
   </head>
   <body>
     <div class="wrapper">
-      <form class="form">
+      <form id="form" class="form">
         <h1>Give advice!</h1>
         <label for="tldr">TL;DR</label>
         <div id="tldr-help" class="helptext">
@@ -13,9 +13,17 @@
         </div>
         <input type="text" id="tldr" aria-describedby="tldr-help" />
         <label for="desc">Describe your advice in detail</label>
-        <div id="desc-help" class="helptext">You can use this space to add context to your advice, share your personal experience at RC, etc</div>
-        <textarea id="desc" aria-describedby="desc-help" cols="1" rows="6"></textarea>
-        <button type="submit">Submit!</button>
+        <div id="desc-help" class="helptext">
+          You can use this space to add context to your advice, share your
+          personal experience at RC, etc
+        </div>
+        <textarea
+          id="desc"
+          aria-describedby="desc-help"
+          cols="1"
+          rows="6"
+        ></textarea>
+        <button id="submit" type="submit">Submit!</button>
       </form>
     </div>
     <script src="script.js"></script>

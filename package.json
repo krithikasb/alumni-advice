@@ -1,0 +1,27 @@
+{
+  "name": "alumni-advice",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.js",
+  "scripts": {
+    "start": "node main.js",
+    "dev": "nodemon index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/krithikasb/alumni-advice.git"
+  },
+  "author": "Krithika B",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/krithikasb/alumni-advice/issues"
+  },
+  "homepage": "https://github.com/krithikasb/alumni-advice#readme",
+  "dependencies": {
+    "express": "^4.18.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.16"
+  }
+}
