@@ -20,7 +20,7 @@ const {
   AuthorizationCode,
 } = require("simple-oauth2");
 
-const callbackUrl = "http://localhost:3001/callback";
+const callbackUrl = "https://alumni-advice.herokuapp.com/callback";
 
 const client = new AuthorizationCode({
   client: {
