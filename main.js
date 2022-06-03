@@ -12,7 +12,17 @@ app.use(express.static("static"));
 require("dotenv").config();
 const Advice = require("./models/advice");
 
-let user = {};
+var session = require("express-session");
+
+const oneDay = 1000 * 60 * 60 * 24;
+app.use(
+  session({
+    secret: process.env.SESSION_SECRET,
+    saveUninitialized: true,
+    cookie: { maxAge: oneDay },
+    resave: false,
+  })
+);
 
 const {
   ClientCredentials,
@@ -44,7 +54,7 @@ const authorizationUri = client.authorizeURL({
 
 // Initial page redirecting to Recurse
 app.get("/auth", (req, res) => {
-  if (!user.id) {
+  if (!req.session.user) {
     console.log(authorizationUri);
     res.redirect(authorizationUri);
   } else {
@@ -59,6 +69,7 @@ app.get("/callback", async (req, res) => {
     code,
     redirect_uri: callbackUrl,
   };
+  let user;
 
   try {
     const accessToken = await client.getToken(options);
@@ -68,16 +79,30 @@ app.get("/callback", async (req, res) => {
       .get("https://recurse.com/api/v1/profiles/me", {
         headers: { Authorization: `Bearer ${accessToken.token.access_token}` },
       })
-      .then((res) => {
-        console.log(`statusCode: ${res.status}`);
-        console.log(res);
-        user = res.data;
+      .then((res2) => {
+        console.log(`statusCode: ${res2.status}`);
+        // console.log(res);
+        user = res2.data;
+        req.session.regenerate(function (err) {
+          if (err) next(err);
+
+          // store user information in session, typically a user id
+          req.session.user = {
+            id: user.id,
+            name: user.name,
+          };
+
+          // save the session before redirection to ensure page
+          // load does not happen before session is saved
+          req.session.save(function (err) {
+            if (err) return next(err);
+            res.redirect("/");
+          });
+        });
       })
       .catch((error) => {
         console.error(error);
       });
-
-    return res.redirect("/");
   } catch (error) {
     console.error("Access Token Error", error.message);
     return res.status(500).json("Authentication failed");
@@ -89,8 +114,8 @@ app.get("/callback", async (req, res) => {
 // });
 
 app.get("/", (req, res) => {
-  console.log("in /", user.id);
-  if (user.id) {
+  console.log("in /", req.session.user);
+  if (req.session.user) {
     res.sendFile(__dirname + "/static/main.html");
   } else {
     res.redirect("/auth");
@@ -104,7 +129,7 @@ app.post("/api/submit", (request, response) => {
     request.body.content,
     request.body.description
   );
-  console.log("in submit", user);
+  console.log("in submit", request.session.user);
   const body = request.body;
 
   if (body.content === undefined) {
@@ -113,8 +138,8 @@ app.post("/api/submit", (request, response) => {
   const a = new Advice({
     content: body.content,
     description: body.description,
-    author_id: user.id,
-    author_name: user.name,
+    author_id: request.session.user.id,
+    author_name: request.session.user.name,
   });
 
   a.save().then((savedAdvice) => {
