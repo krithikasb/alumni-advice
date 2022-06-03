@@ -19,10 +19,12 @@
   },
   "homepage": "https://github.com/krithikasb/alumni-advice#readme",
   "dependencies": {
+    "axios": "^0.27.2",
     "body-parser": "^1.20.0",
     "dotenv": "^16.0.1",
     "express": "^4.18.1",
     "mongoose": "^6.3.5",
+    "simple-oauth2": "^4.3.0",
     "zulip-js": "^2.0.9"
   },
   "devDependencies": {
