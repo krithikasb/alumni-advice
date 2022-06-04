@@ -30,8 +30,6 @@ const {
   AuthorizationCode,
 } = require("simple-oauth2");
 
-const callbackUrl = "https://alumni-advice.herokuapp.com/callback";
-
 const client = new AuthorizationCode({
   client: {
     id: process.env.CLIENT_ID,
@@ -47,15 +45,14 @@ const client = new AuthorizationCode({
   },
 });
 
-// Authorization uri definition
-const authorizationUri = client.authorizeURL({
-  redirect_uri: callbackUrl,
-});
-
 // Initial page redirecting to Recurse
 app.get("/auth", (req, res) => {
+  let callbackUrl = req.protocol + "://" + req.get("host") + "/callback";
+  const authorizationUri = client.authorizeURL({
+    redirect_uri: callbackUrl,
+  });
   if (!req.session.user) {
-    console.log(authorizationUri);
+    console.log(authorizationUri, callbackUrl);
     res.redirect(authorizationUri);
   } else {
     res.redirect("/");
@@ -65,6 +62,7 @@ app.get("/auth", (req, res) => {
 // Callback service parsing the authorization token and asking for the access token
 app.get("/callback", async (req, res) => {
   const { code } = req.query;
+  let callbackUrl = req.protocol + "://" + req.get("host") + "/callback";
   const options = {
     code,
     redirect_uri: callbackUrl,
