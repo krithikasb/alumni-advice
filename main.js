@@ -47,7 +47,16 @@ const client = new AuthorizationCode({
 
 // Initial page redirecting to Recurse
 app.get("/auth", (req, res) => {
-  let callbackUrl = req.protocol + "://" + req.get("host") + "/callback";
+  let protocol = req.get("X-Forwarded-Protocol")
+    ? req.get("X-Forwarded-Protocol")
+    : req.protocol;
+  let callbackUrl = protocol + "://" + req.get("host") + "/callback";
+  console.log(
+    "in auth",
+    req.get("X-Forwarded-Protocol"),
+    req.protocol,
+    req.get("host")
+  );
   const authorizationUri = client.authorizeURL({
     redirect_uri: callbackUrl,
   });
@@ -62,7 +71,10 @@ app.get("/auth", (req, res) => {
 // Callback service parsing the authorization token and asking for the access token
 app.get("/callback", async (req, res) => {
   const { code } = req.query;
-  let callbackUrl = req.protocol + "://" + req.get("host") + "/callback";
+  let protocol = req.get("X-Forwarded-Protocol")
+    ? req.get("X-Forwarded-Protocol")
+    : req.protocol;
+  let callbackUrl = protocol + "://" + req.get("host") + "/callback";
   const options = {
     code,
     redirect_uri: callbackUrl,
