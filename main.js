@@ -24,6 +24,11 @@ app.use(
   })
 );
 
+if (process.env.NODE_ENV === "production") {
+  app.set("trust proxy", 1); // trust first proxy
+  // session.cookie.secure = true; // serve secure cookies
+}
+
 const {
   ClientCredentials,
   ResourceOwnerPassword,
@@ -54,6 +59,7 @@ app.get("/auth", (req, res) => {
   console.log(
     "in auth",
     req.get("X-Forwarded-Protocol"),
+    req.get("X-Forwarded-Proto"),
     req.protocol,
     req.get("host")
   );
