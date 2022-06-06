@@ -162,17 +162,49 @@ app.post("/api/handleMessage", (request, response) => {
   let responsePayload = {
     response_not_required: true,
   };
-  Advice.aggregate([{ $sample: { size: 1 } }]).then((result) => {
-    console.log(result);
-    advice = result[0];
+  if (request.body.message.type === "private") {
+    switch (request.body.message.content.toLowerCase()) {
+      case "subscribe":
+        responsePayload = {
+          content:
+            "You're now subscribed to Advice Bot! You will now receive advice from a Recurse Center alumnus daily!\n\n[Submit your own advice](https://advice.recurse.com)",
+        };
 
-    responsePayload = {
-      content: `${advice.content} 
-      — [${advice.author_name}](https://www.recurse.com/directory/${advice.author_id})`,
-    };
+        response.json(responsePayload);
+        break;
+      case "unsubscribe":
+        responsePayload = {
+          content:
+            "You're unsubscribed!\n\n[Submit your own advice](https://advice.recurse.com)",
+        };
 
+        response.json(responsePayload);
+        break;
+      case "advice":
+        Advice.aggregate([{ $sample: { size: 1 } }]).then((result) => {
+          console.log(result);
+          advice = result[0];
+
+          responsePayload = {
+            content: `${advice.content} 
+        — [${advice.author_name}](https://www.recurse.com/directory/${advice.author_id})`,
+          };
+
+          response.json(responsePayload);
+        });
+        break;
+      default:
+        responsePayload = {
+          content:
+            "**How to use Advice Bot:**\n* `subscribe` to start getting advice from Recurse Center alumni daily\n* `unsubscribe` to stop getting advice from Recurse Center alumni\n* `advice` to get advice from a Recurse Center alumnus now\n\n[Submit your own advice](https://advice.recurse.com)",
+        };
+
+        response.json(responsePayload);
+        break;
+    }
+  } else {
     response.json(responsePayload);
-  });
+  }
 });
 
 app.get("/api/handleMessage", (request, response) => {
