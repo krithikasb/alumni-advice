@@ -166,7 +166,7 @@ app.post("/api/handleMessage", (request, response) => {
       case "subscribe":
         responsePayload = {
           content:
-            "You're now subscribed to Advice Bot! You will now receive advice from a Recurse Center alumnus daily!\n\n[Submit your own advice](https://advice.recurse.com)",
+            "You're now subscribed to Advice Bot! You will now receive advice from a Recurse Center alumnus daily!\n\nSubmit your own advice: https://advice.recurse.com",
         };
 
         response.json(responsePayload);
@@ -174,7 +174,7 @@ app.post("/api/handleMessage", (request, response) => {
       case "unsubscribe":
         responsePayload = {
           content:
-            "You're unsubscribed!\n\n[Submit your own advice](https://advice.recurse.com)",
+            "You're unsubscribed!\n\nSubmit your own advice: https://advice.recurse.com",
         };
 
         response.json(responsePayload);
@@ -184,10 +184,19 @@ app.post("/api/handleMessage", (request, response) => {
           console.log(result);
           advice = result[0];
 
-          responsePayload = {
-            content: `${advice.content} 
-        — [${advice.author_name}](https://www.recurse.com/directory/${advice.author_id})`,
-          };
+          if (advice.description) {
+            responsePayload = {
+              content:
+                `**${advice.content}**\n\n${advice.description}\n\n` +
+                `— [${advice.author_name}](https://www.recurse.com/directory/${advice.author_id})`,
+            };
+          } else {
+            responsePayload = {
+              content:
+                `${advice.content}\n` +
+                `— [${advice.author_name}](https://www.recurse.com/directory/${advice.author_id})`,
+            };
+          }
 
           response.json(responsePayload);
         });
@@ -195,7 +204,7 @@ app.post("/api/handleMessage", (request, response) => {
       default:
         responsePayload = {
           content:
-            "**How to use Advice Bot:**\n* `subscribe` to start getting advice from Recurse Center alumni daily\n* `unsubscribe` to stop getting advice from Recurse Center alumni\n* `advice` to get advice from a Recurse Center alumnus now\n\n[Submit your own advice](https://advice.recurse.com)",
+            "**How to use Advice Bot:**\n* `subscribe` to start getting advice from Recurse Center alumni daily\n* `unsubscribe` to stop getting advice from Recurse Center alumni\n* `advice` to get advice from a Recurse Center alumnus now\n\nSubmit your own advice: https://advice.recurse.com",
         };
 
         response.json(responsePayload);
