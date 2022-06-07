@@ -11,6 +11,7 @@ app.use(express.static("static"));
 
 require("dotenv").config();
 const Advice = require("./models/advice");
+const Subscriber = require("./models/subscriber")
 
 var session = require("express-session");
 
@@ -164,6 +165,12 @@ app.post("/api/handleMessage", (request, response) => {
   if (request.body.message.type === "private") {
     switch (request.body.message.content.toLowerCase()) {
       case "subscribe":
+        const a = new Subscriber({
+            zulip_id: request.body.message.sender_id, 
+            zulip_name: request.body.message.sender_fullname,
+        });
+
+        a.save();
         responsePayload = {
           content:
             "You're now subscribed to Advice Bot! You will now receive advice from a Recurse Center alumnus daily!\n\nSubmit your own advice: https://advice.recurse.com",
@@ -172,12 +179,17 @@ app.post("/api/handleMessage", (request, response) => {
         response.json(responsePayload);
         break;
       case "unsubscribe":
-        responsePayload = {
-          content:
-            "You're unsubscribed!\n\nSubmit your own advice: https://advice.recurse.com",
-        };
-
-        response.json(responsePayload);
+        Subscriber.find({zulip_id: request.body.message.sender_id}).then((result) => {
+            console.log("Deleting");
+            Subscriber.deleteOne({zulip_id: request.body.message.sender_id}).then((result2) => {
+                responsePayload = {
+                    content:
+                    "You're unsubscribed!\n\nSubmit your own advice: https://advice.recurse.com",
+                };
+                response.json(responsePayload);
+                console.log(result2);
+            })
+        })
         break;
       case "advice":
         Advice.aggregate([{ $sample: { size: 1 } }]).then((result) => {
