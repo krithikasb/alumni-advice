@@ -46,7 +46,7 @@ async function sendMessage() {
       type: "private",
       content: content,
     };
-    await client.messages.send(params);
+    console.log(await client.messages.send(params));
   }
 }
 sendMessage();
