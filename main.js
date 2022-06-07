@@ -265,7 +265,7 @@ app.get("/api/handleMessage", (request, response) => {
   });
 });
 
-app.get("/api/sendAdvice", (request, response) => {
+app.get("/api/sendAdvice", async (request, response) => {
   const client = await zulipInit(zulipConfig);
   // The zulip object now contains the config from the zuliprc file
   // console.log(await zulip.streams.subscriptions.retrieve());
@@ -298,7 +298,7 @@ app.get("/api/sendAdvice", (request, response) => {
     console.log(await client.messages.send(params));
   }
   response.json({
-    status: "success"
+    status: "success",
   });
 });
 
