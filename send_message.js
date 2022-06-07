@@ -48,5 +48,7 @@ async function sendMessage() {
     };
     console.log(await client.messages.send(params));
   }
+
+  process.exit();
 }
 sendMessage();
