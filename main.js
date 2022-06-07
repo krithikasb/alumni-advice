@@ -11,7 +11,7 @@ app.use(express.static("static"));
 
 require("dotenv").config();
 const Advice = require("./models/advice");
-const Subscriber = require("./models/subscriber")
+const Subscriber = require("./models/subscriber");
 
 var session = require("express-session");
 
@@ -166,8 +166,8 @@ app.post("/api/handleMessage", (request, response) => {
     switch (request.body.message.content.toLowerCase()) {
       case "subscribe":
         const a = new Subscriber({
-            zulip_id: request.body.message.sender_id, 
-            zulip_name: request.body.message.sender_fullname,
+          zulip_id: request.body.message.sender_id,
+          zulip_name: request.body.message.sender_full_name,
         });
 
         a.save();
@@ -179,17 +179,21 @@ app.post("/api/handleMessage", (request, response) => {
         response.json(responsePayload);
         break;
       case "unsubscribe":
-        Subscriber.find({zulip_id: request.body.message.sender_id}).then((result) => {
+        Subscriber.find({ zulip_id: request.body.message.sender_id }).then(
+          (result) => {
             console.log("Deleting");
-            Subscriber.deleteOne({zulip_id: request.body.message.sender_id}).then((result2) => {
-                responsePayload = {
-                    content:
-                    "You're unsubscribed!\n\nSubmit your own advice: https://advice.recurse.com",
-                };
-                response.json(responsePayload);
-                console.log(result2);
-            })
-        })
+            Subscriber.deleteOne({
+              zulip_id: request.body.message.sender_id,
+            }).then((result2) => {
+              responsePayload = {
+                content:
+                  "You're unsubscribed!\n\nSubmit your own advice: https://advice.recurse.com",
+              };
+              response.json(responsePayload);
+              console.log(result2);
+            });
+          }
+        );
         break;
       case "advice":
         Advice.aggregate([{ $sample: { size: 1 } }]).then((result) => {
