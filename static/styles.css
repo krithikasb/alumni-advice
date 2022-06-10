@@ -85,3 +85,16 @@ button {
 button:hover {
   background-color: rgb(134, 200, 222);
 }
+
+.allAdvice{
+  list-style: none;
+  font-size: 1.25rem;
+  /* margin: unset; */
+  /* margin: 0; */
+  margin-left: 0;
+  margin-top: 1rem;
+}
+.allAdvice li{
+  padding: 1rem;
+  border: 1px cornflowerblue solid;
+}

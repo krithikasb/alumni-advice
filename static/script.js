@@ -29,7 +29,34 @@ function onSubmit(e) {
       descriptionElement.value = "";
       submitButton.innerText = "Submitted!";
       setTimeout(resetSubmitButton, 2000);
+      let ul = document.getElementById("allAdvice")
+      var li = document.createElement('li');
+      li.innerHTML = advice.content
+      ul.appendChild(li);
     });
-}
+  }
+  
+  window.onload = function() {
+  fetch("/api/getAllAdvice", {
+    method: "GET",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    }}
+  )
+  .then((response) => response.json())
+  .then((data) => {
+    let ul = document.getElementById("allAdvice")
+    for(let advice of data){
+      var li = document.createElement('li');
+      li.innerHTML = advice.content
+      ul.appendChild(li);
+
+    }
+  })
+  
+};
+
+
 
 formElement.onsubmit = onSubmit;

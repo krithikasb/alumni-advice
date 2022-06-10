@@ -302,6 +302,13 @@ app.get("/api/sendAdvice", async (request, response) => {
   });
 });
 
+
+app.get("/api/getAllAdvice", async (request, response) => {
+    let result = await Advice.find({author_id: request.session.user.id})
+    response.json(result)
+  }
+)
+
 const PORT = process.env.PORT;
 app.listen(PORT);
 console.log(`Server running on port ${PORT}`);
