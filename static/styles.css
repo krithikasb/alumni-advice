@@ -92,6 +92,11 @@ button:hover {
   background-color: rgb(134, 200, 222);
 }
 
+.allAdviceWrapper {
+  display: flex;
+  flex-direction: column-reverse;
+}
+
 .previouslySubmittedWrapper {
   display: block;
   background-color: #f0f4f5;
@@ -107,6 +112,7 @@ button:hover {
   color: white;
   font-style: normal;
   font-size: 1.25rem;
+  font-weight: 400;
   padding: 0.2rem 1rem;
   position: relative;
   margin: 0;
@@ -171,4 +177,8 @@ button:hover {
   font-weight: 600;
   grid-column: 2/3;
   grid-row: 1/2;
+}
+
+ul.allAdvice:empty ~ .previouslySubmittedWrapper {
+  display: none;
 }
