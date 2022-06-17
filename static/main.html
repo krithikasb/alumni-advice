@@ -35,7 +35,12 @@
         <div id="tldr-help" class="helptext">
           Keep the tldr short and pithy&mdash; fortune cookie vibes!
         </div>
-        <input type="text" id="tldr" aria-describedby="tldr-help" />
+        <input
+          type="text"
+          id="tldr"
+          aria-describedby="tldr-help"
+          autocomplete="off"
+        />
         <label for="desc">Describe your advice in detail</label>
         <div id="desc-help" class="helptext">
           You can use this space to add context to your advice, share your
@@ -46,6 +51,7 @@
           aria-describedby="desc-help"
           cols="1"
           rows="6"
+          autocomplete="off"
         ></textarea>
         <div class="buttonWrapper">
           <button id="submit" type="submit">Submit!</button>
