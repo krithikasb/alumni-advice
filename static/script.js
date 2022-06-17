@@ -24,39 +24,43 @@ function onSubmit(e) {
     }),
   })
     .then((response) => response.json())
-    .then((data) => {
+    .then((advice) => {
       contentElement.value = "";
       descriptionElement.value = "";
       submitButton.innerText = "Submitted!";
       setTimeout(resetSubmitButton, 2000);
-      let ul = document.getElementById("allAdvice")
-      var li = document.createElement('li');
-      li.innerHTML = advice.content
+      let ul = document.getElementById("allAdvice");
+      let li = createAdviceListItem(advice);
       ul.appendChild(li);
     });
+}
+
+function createAdviceListItem(advice) {
+  let li = document.createElement("li");
+  if (advice.description) {
+    li.innerText = advice.content + "\n\n" + advice.description;
+  } else {
+    li.innerText = advice.content;
   }
-  
-  window.onload = function() {
+  return li;
+}
+
+window.onload = function () {
   fetch("/api/getAllAdvice", {
     method: "GET",
     headers: {
       Accept: "application/json",
       "Content-Type": "application/json",
-    }}
-  )
-  .then((response) => response.json())
-  .then((data) => {
-    let ul = document.getElementById("allAdvice")
-    for(let advice of data){
-      var li = document.createElement('li');
-      li.innerHTML = advice.content
-      ul.appendChild(li);
-
-    }
+    },
   })
-  
+    .then((response) => response.json())
+    .then((data) => {
+      let ul = document.getElementById("allAdvice");
+      for (let advice of data) {
+        let li = createAdviceListItem(advice);
+        ul.appendChild(li);
+      }
+    });
 };
-
-
 
 formElement.onsubmit = onSubmit;
