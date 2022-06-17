@@ -28,7 +28,11 @@ function onSubmit(e) {
       contentElement.value = "";
       descriptionElement.value = "";
       submitButton.innerText = "Submitted!";
-      setTimeout(resetSubmitButton, 2000);
+      document.getElementById("thankyou").style.display = "block";
+      setTimeout(() => {
+        resetSubmitButton();
+        document.getElementById("thankyou").style.display = "none";
+      }, 4000);
       let ul = document.getElementById("allAdvice");
       let li = createAdviceListItem(advice);
       ul.appendChild(li);
