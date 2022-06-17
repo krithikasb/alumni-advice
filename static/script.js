@@ -30,19 +30,28 @@ function onSubmit(e) {
       submitButton.innerText = "Submitted!";
       confetti.start();
       document.getElementById("thankyou").style.display = "block";
+      let ul = document.getElementById("allAdvice");
+      let li = createAdviceListItem(advice, true);
       setTimeout(() => {
         resetSubmitButton();
         confetti.stop();
         document.getElementById("thankyou").style.display = "none";
+        li.scrollIntoView({
+          behavior: "smooth",
+        });
       }, 4000);
-      let ul = document.getElementById("allAdvice");
-      let li = createAdviceListItem(advice);
       ul.appendChild(li);
     });
 }
 
-function createAdviceListItem(advice) {
+function createAdviceListItem(advice, isNewlyAdded = false) {
   let li = document.createElement("li");
+  if (isNewlyAdded) {
+    li.classList.add("newlyAdded");
+    setTimeout(() => {
+      li.classList.remove("newlyAdded");
+    }, 6000);
+  }
   if (advice.description) {
     li.innerText = advice.content + "\n\n" + advice.description;
   } else {

@@ -204,10 +204,16 @@ button:hover {
   font-size: 1rem;
   border-top: 1px solid #e0e0e0;
   border-bottom: 1px solid #fff;
+  transition: all 1s ease-in-out;
 }
 
 .allAdvice li:first-child {
   border-top: unset;
+}
+
+.allAdvice li.newlyAdded {
+  background-color: peachpuff;
+  transition: all 1s ease-in-out;
 }
 
 .allAdvice li::before {
