@@ -48,7 +48,7 @@ function createAdviceListItem(advice, isNewlyAdded = false) {
     li.classList.add("newlyAdded");
     setTimeout(() => {
       li.classList.remove("newlyAdded");
-    }, 6000);
+    }, 4000);
   }
   if (advice.description) {
     li.innerText = advice.content + "\n\n" + advice.description;
