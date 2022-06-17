@@ -8,12 +8,16 @@ body {
   padding: 0;
   font-family: "Libre Baskerville", Georgia, serif;
   line-height: 1.2;
+  height: 100%;
 }
 
 .wrapper {
   max-width: 40rem;
   padding: 0 2rem;
   margin: auto;
+  height: 100%;
+  display: grid;
+  align-items: start;
 }
 
 .form {
@@ -23,6 +27,20 @@ body {
 h1 {
   text-align: center;
   font-size: 3rem;
+  color: cornflowerblue;
+}
+
+.description {
+  color: grey;
+  margin-top: unset;
+  margin-bottom: 0.6rem;
+}
+
+.description.center {
+  text-align: center;
+}
+
+.description a {
   color: cornflowerblue;
 }
 
@@ -181,4 +199,9 @@ button:hover {
 
 ul.allAdvice:empty ~ .previouslySubmittedWrapper {
   display: none;
+}
+
+.wrapper footer {
+  align-self: end;
+  padding-bottom: 1rem;
 }
