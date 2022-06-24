@@ -37,7 +37,7 @@ function onSubmit(e) {
         li.scrollIntoView({
           behavior: "smooth",
         });
-      }, 4000);
+      }, 3000);
       ul.appendChild(li);
     });
 }
