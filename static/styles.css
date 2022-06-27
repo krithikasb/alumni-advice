@@ -11,6 +11,7 @@ body {
   height: 100%;
   position: relative;
   overflow-x: hidden;
+  background-image: url("./hand-painted-watercolor-abstract-watercolor-background.jpg");
 }
 
 .wrapper {
@@ -28,8 +29,8 @@ body {
 
 h1 {
   text-align: center;
-  font-size: 3rem;
-  color: cornflowerblue;
+  font-size: 2.5rem;
+  color: #5276e2;
 }
 
 .description {
@@ -43,7 +44,7 @@ h1 {
 }
 
 .description a {
-  color: cornflowerblue;
+  color: #5276e2;
 }
 
 label {
@@ -60,7 +61,7 @@ label {
   font-family: "Source Sans Pro", "Helvetica Neue", "Helvetica", "Arial",
     sans-serif;
   font-size: 0.8rem;
-  color: #919c9c;
+  color: grey;
 }
 
 input,
@@ -81,14 +82,14 @@ textarea {
 
 input:focus,
 textarea:focus {
-  border-bottom: 3px solid cornflowerblue;
+  border-bottom: 3px solid #5276e2;
   transition: all 0.15s linear;
 }
 
 input:focus-visible,
 textarea:focus-visible {
   outline: unset;
-  border-bottom: 3px solid cornflowerblue;
+  border-bottom: 3px solid #5276e2;
   transition: all 0.15s linear;
 }
 
