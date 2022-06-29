@@ -8,6 +8,7 @@ const Advice = require("../models/advice");
 const Subscriber = require("../models/subscriber");
 
 const zulipInit = require("zulip-js");
+const { getFormattedAdvice } = require("../utils/utils");
 
 let zulipConfig;
 if (process.env.NODE_ENV === "production") {
@@ -30,17 +31,7 @@ scheduledRouter.get("/sendAdvice", async (request, response) => {
   // get random advice
   let result = await Advice.aggregate([{ $sample: { size: 1 } }]);
   let advice = result[0];
-  let content;
-
-  if (advice.description) {
-    content =
-      `**${advice.content}**\n\n${advice.description}\n\n` +
-      `— [${advice.author_name}](https://www.recurse.com/directory/${advice.author_id})`;
-  } else {
-    content =
-      `${advice.content}\n` +
-      `— [${advice.author_name}](https://www.recurse.com/directory/${advice.author_id})`;
-  }
+  let content = getFormattedAdvice(advice);
 
   let result2 = await Subscriber.find({}, "zulip_id");
   // send a message

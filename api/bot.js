@@ -5,6 +5,7 @@ const botRouter = require("express").Router();
 require("dotenv").config();
 const Advice = require("../models/advice");
 const Subscriber = require("../models/subscriber");
+const { getFormattedAdvice } = require("../utils/utils");
 
 botRouter.post("/handleMessage", (request, response) => {
   let advice;
@@ -46,19 +47,9 @@ botRouter.post("/handleMessage", (request, response) => {
         Advice.aggregate([{ $sample: { size: 1 } }]).then((result) => {
           advice = result[0];
 
-          if (advice.description) {
-            responsePayload = {
-              content:
-                `**${advice.content}**\n\n${advice.description}\n\n` +
-                `— [${advice.author_name}](https://www.recurse.com/directory/${advice.author_id})`,
-            };
-          } else {
-            responsePayload = {
-              content:
-                `${advice.content}\n` +
-                `— [${advice.author_name}](https://www.recurse.com/directory/${advice.author_id})`,
-            };
-          }
+          responsePayload = {
+            content: getFormattedAdvice(advice),
+          };
 
           response.json(responsePayload);
         });
@@ -84,8 +75,7 @@ botRouter.get("/handleMessage", (request, response) => {
     advice = result[0];
 
     const adviceResponse = {
-      content: `${advice.content} 
-      — [${advice.author_name}](https://www.recurse.com/directory/${advice.author_id})`,
+      content: getFormattedAdvice(advice),
     };
     const responseNotRequiredPayload = {
       response_not_required: true,
