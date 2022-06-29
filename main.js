@@ -1,5 +1,3 @@
-console.log("inside main.js");
-
 const express = require("express");
 const axios = require("axios");
 
@@ -24,7 +22,6 @@ if (process.env.NODE_ENV === "production") {
 } else {
   const path = require("path");
   const zuliprc = path.resolve(__dirname, "zuliprc");
-  console.log(zuliprc);
   zulipConfig = { zuliprc };
 }
 
@@ -45,11 +42,7 @@ if (process.env.NODE_ENV === "production") {
   // session.cookie.secure = true; // serve secure cookies
 }
 
-const {
-  ClientCredentials,
-  ResourceOwnerPassword,
-  AuthorizationCode,
-} = require("simple-oauth2");
+const { AuthorizationCode } = require("simple-oauth2");
 
 const client = new AuthorizationCode({
   client: {
@@ -100,7 +93,6 @@ app.get("/callback", async (req, res) => {
       })
       .then((res2) => {
         console.log(`statusCode: ${res2.status}`);
-        // console.log(res);
         user = res2.data;
         req.session.regenerate(function (err) {
           if (err) next(err);
@@ -167,12 +159,6 @@ app.post("/api/submit", (request, response) => {
 });
 
 app.post("/api/handleMessage", (request, response) => {
-  console.log(
-    "in handleMessage",
-    request.body.data,
-    request.body.message.type,
-    request.body.message.sender_id
-  );
   let advice;
   let responsePayload = {
     response_not_required: true,
@@ -196,7 +182,6 @@ app.post("/api/handleMessage", (request, response) => {
       case "unsubscribe":
         Subscriber.find({ zulip_id: request.body.message.sender_id }).then(
           (result) => {
-            console.log("Deleting");
             Subscriber.deleteOne({
               zulip_id: request.body.message.sender_id,
             }).then((result2) => {
@@ -205,14 +190,12 @@ app.post("/api/handleMessage", (request, response) => {
                   "You're unsubscribed!\n\nSubmit your own advice: https://advice.recurse.com",
               };
               response.json(responsePayload);
-              console.log(result2);
             });
           }
         );
         break;
       case "advice":
         Advice.aggregate([{ $sample: { size: 1 } }]).then((result) => {
-          console.log(result);
           advice = result[0];
 
           if (advice.description) {
@@ -268,11 +251,9 @@ app.get("/api/handleMessage", (request, response) => {
 app.get("/api/sendAdvice", async (request, response) => {
   const client = await zulipInit(zulipConfig);
   // The zulip object now contains the config from the zuliprc file
-  // console.log(await zulip.streams.subscriptions.retrieve());
 
   // get random advice
   let result = await Advice.aggregate([{ $sample: { size: 1 } }]);
-  console.log(result);
   let advice = result[0];
   let content;
 
@@ -287,7 +268,6 @@ app.get("/api/sendAdvice", async (request, response) => {
   }
 
   let result2 = await Subscriber.find({}, "zulip_id");
-  console.log(result2);
   // send a message
   for (let s of result2) {
     params = {
@@ -303,7 +283,6 @@ app.get("/api/sendAdvice", async (request, response) => {
 });
 
 app.get("/api/getAllAdvice", async (request, response) => {
-  console.log(request);
   let result = await Advice.find({ author_id: request.session.user.id });
   response.json(result);
 });
