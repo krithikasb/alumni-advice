@@ -8,6 +8,8 @@ Collects advice from RC alums! Uses mongodb atlas for a DB and hosted on heroku.
 
 https://advice.recurse.com
 
+![demo-web-app-gif](https://user-images.githubusercontent.com/76915822/176476343-36b32844-1dc9-4ad7-ac4f-d6728b0925aa.gif)
+
 Steps to run locally:
 
 1. Create a file called `.env` in the root of the project similar to the `.env.example` file
@@ -22,6 +24,10 @@ Steps to run locally:
 ## Zulip bot
 
 Recursers can subscribe to the "Advice of the Day!" bot to get one piece of advice from an RC alum everyday
+
+https://recurse.zulipchat.com/#narrow/pm-with/506831-advice-bot
+
+![demo-zulip-bot-gif](https://user-images.githubusercontent.com/76915822/176476363-c510a28b-2385-4be5-8afa-bb7993c14fb8.gif)
 
 Steps to run locally:
 
