@@ -1,11 +1,10 @@
 console.log("inside main.js");
 
 const express = require("express");
-var bodyParser = require("body-parser");
 const axios = require("axios");
 
 var app = express();
-app.use(bodyParser());
+app.use(express.json());
 
 app.use(express.static("static"));
 
@@ -304,6 +303,7 @@ app.get("/api/sendAdvice", async (request, response) => {
 });
 
 app.get("/api/getAllAdvice", async (request, response) => {
+  console.log(request);
   let result = await Advice.find({ author_id: request.session.user.id });
   response.json(result);
 });
