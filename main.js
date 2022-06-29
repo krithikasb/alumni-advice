@@ -337,7 +337,7 @@ app.get("/api/introduceBot", async (request, response) => {
           topic: "Advice of the Day!",
           type: "stream",
           content:
-            "Hello @*Currently at RC*! You can subscribe to the [Advice of the Day](https://recurse.zulipchat.com/#narrow/pm-with/506831-advice-bot) bot to receive one piece of advice from an RC alum everday!",
+            "Hello @*Currently at RC*! You can subscribe to the [Advice of the Day](https://recurse.zulipchat.com/#narrow/pm-with/506831-advice-bot) bot to receive one piece of advice from an RC alum everyday!",
         };
         console.log(await client.messages.send(params));
 
