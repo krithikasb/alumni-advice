@@ -12,7 +12,7 @@ function onSubmit(e) {
   let descriptionElement = document.getElementById("desc");
   submitButton.disabled = true;
   submitButton.innerText = "Submitting";
-  fetch("/api/submit", {
+  fetch("/api/advice/submit", {
     method: "POST",
     headers: {
       Accept: "application/json",
@@ -59,7 +59,7 @@ function createAdviceListItem(advice, isNewlyAdded = false) {
 }
 
 window.onload = function () {
-  fetch("/api/getAllAdvice", {
+  fetch("/api/advice/list", {
     method: "GET",
     headers: {
       Accept: "application/json",
