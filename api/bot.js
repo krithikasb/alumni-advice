@@ -68,21 +68,4 @@ botRouter.post("/handleMessage", (request, response) => {
   }
 });
 
-botRouter.get("/handleMessage", (request, response) => {
-  let advice;
-  Advice.aggregate([{ $sample: { size: 1 } }]).then((result) => {
-    console.log(result);
-    advice = result[0];
-
-    const adviceResponse = {
-      content: getFormattedAdvice(advice),
-    };
-    const responseNotRequiredPayload = {
-      response_not_required: true,
-    };
-
-    response.json(adviceResponse);
-  });
-});
-
 module.exports = botRouter;
