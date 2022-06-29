@@ -1,3 +1,5 @@
+// This file defines the API that is called from the zulip bot (outgoing webhook)
+
 const botRouter = require("express").Router();
 
 require("dotenv").config();

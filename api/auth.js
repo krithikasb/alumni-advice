@@ -1,3 +1,5 @@
+// This file defines the APIs that oauth requires
+
 const authRouter = require("express").Router();
 const axios = require("axios");
 
@@ -20,7 +22,7 @@ const client = new AuthorizationCode({
   },
 });
 
-// Initial page redirecting to Recurse
+// Initial page redirecting to recurse.com
 authRouter.get("/", (req, res) => {
   let callbackUrl = process.env.BASE_URL + "/auth/callback";
   const authorizationUri = client.authorizeURL({

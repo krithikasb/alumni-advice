@@ -1,9 +1,12 @@
+// This file defines APIs that are called from the web-app
+
 const adviceRouter = require("express").Router();
 
 require("dotenv").config();
 const Advice = require("../models/advice");
 
 adviceRouter.post("/submit", (request, response) => {
+  // submit advice
   console.log(
     "in submit",
     request.body,
@@ -29,7 +32,7 @@ adviceRouter.post("/submit", (request, response) => {
 });
 
 adviceRouter.get("/list", async (request, response) => {
-  //API lists all advice from logged-in user
+  // lists all advice from logged-in user
   let result = await Advice.find({ author_id: request.session.user.id });
   response.json(result);
 });
