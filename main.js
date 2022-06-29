@@ -265,6 +265,7 @@ app.get("/api/handleMessage", (request, response) => {
   });
 });
 
+// this API gets called everyday from cron-job.org
 app.get("/api/sendAdvice", async (request, response) => {
   const client = await zulipInit(zulipConfig);
   // The zulip object now contains the config from the zuliprc file
@@ -305,6 +306,52 @@ app.get("/api/sendAdvice", async (request, response) => {
 app.get("/api/getAllAdvice", async (request, response) => {
   let result = await Advice.find({ author_id: request.session.user.id });
   response.json(result);
+});
+
+// call this api every wednesday from cron-job.org
+app.get("/api/introduceBot", async (request, response) => {
+  // make call to /api/v1/batches
+  // using personal access token
+  axios
+    .get("https://recurse.com/api/v1/batches", {
+      headers: {
+        Authorization: `Bearer ${process.env.PERSONAL_ACCESS_TOKEN}`,
+      },
+    })
+    .then(async (res) => {
+      console.log(`statusCode: ${res.status}`);
+      // check if latest batch has less than a week old start date
+      // and introduce bot in 397 bridge mentioning Currently at RC
+      // otherwise do nothing
+      const latestBatch = res.data[0];
+      console.log(new Date(latestBatch.start_date));
+      if (
+        new Date(latestBatch.start_date) >
+        new Date(new Date() - 7 * 24 * 60 * 60 * 1000)
+      ) {
+        console.log("less than a week");
+        const client = await zulipInit(zulipConfig);
+
+        params = {
+          to: "397 Bridge",
+          topic: "Advice of the Day!",
+          type: "stream",
+          content:
+            "Hello @*Currently at RC*! You can subscribe to the [Advice of the Day](https://recurse.zulipchat.com/#narrow/pm-with/506831-advice-bot) bot to receive one piece of advice from an RC alum everday!",
+        };
+        console.log(await client.messages.send(params));
+
+        response.json({
+          status: "success",
+          new_batch: true,
+        });
+      } else {
+        response.json({
+          status: "success",
+          new_batch: false,
+        });
+      }
+    });
 });
 
 const PORT = process.env.PORT;
