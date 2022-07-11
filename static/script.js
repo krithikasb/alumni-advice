@@ -51,9 +51,9 @@ function createAdviceListItem(advice, isNewlyAdded = false) {
     }, 4000);
   }
   if (advice.description) {
-    li.innerText = advice.content + "\n\n" + advice.description;
+    li.innerHTML = `<div><b>${advice.content}</b>\r\n\r\n${advice.description}</div>`;
   } else {
-    li.innerText = advice.content;
+    li.innerHTML = advice.content;
   }
   return li;
 }
