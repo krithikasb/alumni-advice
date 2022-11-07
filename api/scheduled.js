@@ -61,7 +61,7 @@ scheduledRouter.get("/introduceBot", async (request, response) => {
     .then(async (res) => {
       console.log(`statusCode: ${res.status}`);
       // check if latest batch has less than a week old start date
-      // and introduce bot in 397 bridge mentioning Currently at RC
+      // and introduce bot in current batches mentioning Currently at RC
       // otherwise do nothing
       const latestBatch = res.data[0];
       console.log(new Date(latestBatch.start_date));
@@ -73,7 +73,7 @@ scheduledRouter.get("/introduceBot", async (request, response) => {
         const client = await zulipInit(zulipConfig);
 
         params = {
-          to: "397 Bridge",
+          to: "current batches",
           topic: "Advice of the Day!",
           type: "stream",
           content:
